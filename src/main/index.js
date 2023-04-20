@@ -1,50 +1,51 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron');
 
-let mainWindow
+let mainWindow;
+const protocol = 'zhufeng';
+const scheme = `${protocol}://`;
+app.setAsDefaultProtocolClient(protocol);
 
-const protocol = 'juejin'
-const scheme = `${protocol}://`
-app.setAsDefaultProtocolClient(protocol)
+let urlParams = {};
 
-let urlParams = {}
+handleSchemeWakeup(process.argv);
 
-handleSchemeWakeup(process.argv)
-
-const gotTheLock = app.requestSingleInstanceLock()
+const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
-  app.quit()
+  app.quit();
 } else {
   app.on('second-instance', (event, argv) => {
-    mainWindow.restore()
-    mainWindow.show()
-    handleSchemeWakeup(argv)
-  })
+    mainWindow.restore();
+    mainWindow.show();
+    handleSchemeWakeup(argv);
+  });
 }
 
-app.on('open-url', (event, url) => handleSchemeWakeup(url))
+app.on('open-url', (event, url) => handleSchemeWakeup(url));
 
 app.whenReady().then(() => {
-  createWindow()
-})
+  createWindow();
+});
 
 function createWindow() {
-  const width = parseInt(urlParams.width) || 800
-  const height = parseInt(urlParams.height) || 600
-  const loadURL = urlParams.url || 'https://www.juejin.cn'
-  console.log()
+  console.log('urlParams---->', urlParams);
+  const width = parseInt(urlParams.width) || 800;
+  const height = parseInt(urlParams.height) || 600;
+  const { url = 'http://www.javascriptpeixun.cn/my/courses/learning' } = urlParams;
+  console.log();
   if (mainWindow) {
-    mainWindow.setSize(width, height)
+    mainWindow.setSize(width, height);
   } else {
-    mainWindow = new BrowserWindow({ width, height })
-    mainWindow.loadURL(loadURL)
-    mainWindow.webContents.openDevTools()
+    mainWindow = new BrowserWindow({ width, height });
+    mainWindow.loadURL(url);
+    // mainWindow.webContents.openDevTools();
   }
 }
 
 function handleSchemeWakeup(argv) {
-  const url = [].concat(argv).find((v) => v.startsWith(scheme))
-  if (!url) return
-  const searchParams = new URLSearchParams(url.slice(scheme.length))
-  urlParams = Object.fromEntries(searchParams.entries())
-  if (app.isReady()) createWindow()
+  console.log('argv---->', argv);
+  const url = [].concat(argv).find((v) => v.startsWith(scheme));
+  if (!url) return;
+  const searchParams = new URLSearchParams(url.slice(scheme.length));
+  urlParams = Object.fromEntries(searchParams.entries());
+  if (app.isReady()) createWindow();
 }
