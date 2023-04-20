@@ -8,4 +8,5 @@ app.whenReady().then(() => {
     titleBarStyle: 'hiddenInset'
   })
   win.loadFile(path.join(__dirname, '../renderer/index.html'))
+  win.webContents.openDevTools()
 })
