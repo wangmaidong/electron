@@ -4,26 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Electron Desktop</title>
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #ABE3F1;
-      -webkit-app-region: drag;
-    }
-    img {
-      width: 200px;
-    }
-    h1 {
-      margin: 50px;
-    }
-  </style>
 </head>
 <body>
-  <img src="https://img.zlib.cn/electron.webp" alt="">
-  <h1>Electron Desktop</h1>
+  <div>
+    <div>
+      <input type="text" placeholder="请输入保存路径" id="inputPath"/>
+    </div>
+    <div>
+      <textarea  placeholder="请输入文本内容" id="inputContent"></textarea>
+    </div>
+    
+    <button id="saveBtn">保存</button>
+  </div>
 </body>
 </html>
